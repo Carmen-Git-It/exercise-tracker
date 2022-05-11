@@ -17,7 +17,7 @@ app.post('/api/users', (req, res, next) => {
   if(req.body.username === '') {
     res.json({'error': 'Error, blank username is invalid.'});
   } else {
-    createUser(red.body.username, (err, user) => {
+    createUser(req.body.username, (err, user) => {
       if (err) {
         next();
       } else {

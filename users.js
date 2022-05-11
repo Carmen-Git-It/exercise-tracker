@@ -13,8 +13,7 @@ mongoose.connect(process.env.MONGO_URI, {newUrlParser: true, useUnifiedTopology:
 const usersSchema = new Schema({
     username: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     count: {
         type: Number,
