@@ -27,6 +27,14 @@ app.post('/api/users', (req, res, next) => {
   }
 });
 
+app.post('/api/users/:_id/exercises', (req, res, next) => {
+  if (req.body._id && req.body.username && req.body.date && req.body.duration && req.body.description) {
+    
+  } else {
+    res.json({'Error': 'Cannot process request with missing data.'});
+  }
+});
+
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log('Your app is listening on port ' + listener.address().port)
 })

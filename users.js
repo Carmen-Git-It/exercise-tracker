@@ -31,8 +31,7 @@ const usersSchema = new Schema({
                 required: true
             },
             date: {
-                type: Date,
-                required: true
+                type: Date
             }
         }
     ]
@@ -50,7 +49,11 @@ const createUser = function(name, done) {
             return done(null, res);
         }
     });
-}
+};
+
+const addExercise = function(id, description, duration, date, done) {
+    
+};
 
 exports.usersModel = Users;
 exports.createUser = createUser;
