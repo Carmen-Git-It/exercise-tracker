@@ -52,8 +52,28 @@ const createUser = function(name, done) {
 };
 
 const addExercise = function(id, description, duration, date, done) {
-    
+    Users.findById(id, (err, user) => {
+        if (err) {
+            console.log(err);
+            return done(err, null);
+        } else if(user) {
+            user.count++;
+            user.log.push({'description': description, 'duration': duration, 'date': date});
+            user.save((err, updated) => {
+                if (err) {
+                    console.log(err);
+                    return done(err, null);
+                } else {
+                    return done(null, updated);
+                }
+            });
+        } else {
+            console.log('User not found!');
+            return ('User not found!', null);
+        }
+    });
 };
 
 exports.usersModel = Users;
 exports.createUser = createUser;
+exports.addExercise = addExercise;

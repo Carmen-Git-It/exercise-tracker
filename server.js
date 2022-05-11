@@ -12,6 +12,7 @@ app.get('/', (req, res) => {
 });
 
 const createUser = require('./users.js').createUser;
+const addExercise = require('./users.js').addExercise;
 
 app.post('/api/users', (req, res, next) => {
   if(req.body.username === '') {
@@ -28,8 +29,14 @@ app.post('/api/users', (req, res, next) => {
 });
 
 app.post('/api/users/:_id/exercises', (req, res, next) => {
-  if (req.body._id && req.body.username && req.body.date && req.body.duration && req.body.description) {
-    
+  if (req.body[':_id'] && req.body.description && req.body.duration) {
+    addExercise(req.body[':_id'], req.body.description, req.body.duration, req.body.date, (err, user) => {
+      if (err) {
+        res.json({'Error': 'Error finding or updating user in database.'});
+      } else {
+        res.json(user);
+      }
+    });
   } else {
     res.json({'Error': 'Cannot process request with missing data.'});
   }
