@@ -41,3 +41,17 @@ const usersSchema = new Schema({
 
 const Users = mongoose.model("users", usersSchema);
 
+const createUser = function(name, done) {
+    const newUser = new Users({"username": name, "count": 0});
+    newUser.save((err, res) => {
+        if (err) {
+            console.log(err);
+            return done(err, null);
+        } else {
+            return done(null, res);
+        }
+    });
+}
+
+exports.usersModel = Users;
+exports.createUser = createUser;
