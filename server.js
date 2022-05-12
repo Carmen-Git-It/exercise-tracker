@@ -54,29 +54,44 @@ app.get('/api/users/:_id/logs', (req, res) => {
       res.json({'Error': 'Error retrieving user!'});
     } else if(user !== null) {
       let response = {'_id': user._id, 'username': user.username};
-      if (req.query.from && req.query.to && req.query.limit) {
-        const from = new Date(req.query.from);
-        const to = new Date(req.query.to);
-        let count = 0;
-        const log = user.log.filter((exercise) => {
-          if (exercise.date >= from && exercise.date <= to && count < req.query.limit) {
-            count++;
-            return exercise;
-          }
-        });
 
-        response.from = from.toDateString();
-        response.to = to.toDateString();
-        response.count = count;
-        response.log = [];
+      const from = req.query.from ? new Date(req.query.from) : null;
+      const to = req.query.to ? new Date(req.query.to) : null;
+      const limit = req.query.limit ? req.query.limit : null;
 
-        for (let i = 0; i < count; i++) {
-          response.log.push({'description': log[i].description, 'duration': log[i].duration, 'date': log[i].date.toDateString()});
+      let count = 0;
+      const log = user.log.filter((exercise) => {
+        let valid = true;
+        if (from && exercise.date < from) {
+          valid = false;
         }
-        
-        res.json(response);
+        if (to && exercise.date > to) {
+          valid = false;
+        }
+        if (limit && count >= limit) {
+          valid = false;
+        }
+        if (valid) {
+          count++;
+          return exercise;
+        }
+      });
+
+      if (req.query.from) {
+        response.from = from.toDateString();
       }
-     
+      if (req.query.to) {
+        response.to = to.toDateString();
+      }
+
+      response.count = count;
+      response.log = [];
+
+      for (let i = 0; i < count; i++) {
+        response.log.push({'description': log[i].description, 'duration': log[i].duration, 'date': log[i].date.toDateString()});
+      }
+      
+      res.json(response);
     } else {
       res.json({'Error': 'Error retrieving user!'});
     }
