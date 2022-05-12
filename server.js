@@ -45,7 +45,7 @@ app.get('/api/users', (req, res) => {
 });
 
 app.post('/api/users/:_id/exercises', (req, res, next) => {
-  if (req.body[':_id'] && req.body.description && req.body.duration) {
+  if (req.body.description && req.body.duration) {
     addExercise(req.body[':_id'], req.body.description, req.body.duration, req.body.date, (err, user) => {
       if (err) {
         res.json({'Error': 'Error finding or updating user in database.'});
