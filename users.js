@@ -58,6 +58,9 @@ const addExercise = function(id, description, duration, date, done) {
             return done(err, null);
         } else if(user) {
             user.count++;
+            if (!date) {
+                date = Date.now();
+            }
             user.log.push({'description': description, 'duration': duration, 'date': date});
             user.save((err, updated) => {
                 if (err) {

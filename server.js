@@ -35,7 +35,12 @@ app.post('/api/users/:_id/exercises', (req, res, next) => {
       if (err) {
         res.json({'Error': 'Error finding or updating user in database.'});
       } else {
-        res.json(user);
+        res.json({
+          '_id': user._id, 
+          'username': user.username, 
+          'date': user.log[user.count - 1].date.toDateString(), 
+          'duration': user.log[user.count - 1].duration, 
+          'description': user.log[user.count - 1].description});
       }
     });
   } else {
@@ -49,7 +54,7 @@ app.get('/api/users/:_id/logs', (req, res) => {
       res.json({'Error': 'Error retrieving user!'});
     } else {
       if (req.params.from && req.params.to && req.params.limit) {
-        
+        //TODO Add formatted json output here
       }
     }
   });
