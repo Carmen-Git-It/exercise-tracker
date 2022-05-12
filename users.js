@@ -88,7 +88,19 @@ const getUserById = function(id, done) {
     });
 }
 
+const getAllUsers = function(done) {
+    Users.find({}, (err, users) => {
+        if (err) {
+            console.log(err);
+            return done(err, null);
+        } else {
+            return done(null, users);
+        }
+    });
+}
+
 exports.usersModel = Users;
 exports.createUser = createUser;
 exports.addExercise = addExercise;
 exports.getUserById = getUserById;
+exports.getAllUsers = getAllUsers;

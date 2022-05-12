@@ -14,6 +14,7 @@ app.get('/', (req, res) => {
 const createUser = require('./users.js').createUser;
 const addExercise = require('./users.js').addExercise;
 const getUserById = require('./users.js').getUserById;
+const getAllUsers = require('./users.js').getAllUsers;
 
 app.post('/api/users', (req, res, next) => {
   if(req.body.username === '') {
@@ -27,6 +28,20 @@ app.post('/api/users', (req, res, next) => {
       }
     });
   }
+});
+
+app.get('/api/users', (req, res) => {
+  getAllUsers((err, users) => {
+    if (err) {
+      res.json({'Error': 'Error finding list of users'});
+    } else {
+      let result = [];
+      for (let i = 0; i < users.length; i++) {
+        result.push({'_id': users[i]._id, 'username': users[i].username, '__v': users[i].__v});
+      }
+      res.json(result);
+    }
+  });
 });
 
 app.post('/api/users/:_id/exercises', (req, res, next) => {
