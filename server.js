@@ -65,6 +65,8 @@ app.get('/api/users/:_id/logs', (req, res) => {
           }
         });
 
+        response.from = from.toDateString();
+        response.to = to.toDateString();
         response.count = count;
         response.log = [];
 
