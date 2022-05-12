@@ -49,17 +49,38 @@ app.post('/api/users/:_id/exercises', (req, res, next) => {
 });
 
 app.get('/api/users/:_id/logs', (req, res) => {
-  getUserById(id, (err, user) => {
+  getUserById(req.params._id, (err, user) => {
     if (err) {
       res.json({'Error': 'Error retrieving user!'});
-    } else {
-      if (req.params.from && req.params.to && req.params.limit) {
-        //TODO Add formatted json output here
+    } else if(user !== null) {
+      let response = {'_id': user._id, 'username': user.username};
+      if (req.query.from && req.query.to && req.query.limit) {
+        const from = new Date(req.query.from);
+        const to = new Date(req.query.to);
+        let count = 0;
+        const log = user.log.filter((exercise) => {
+          if (exercise.date >= from && exercise.date <= to && count < req.query.limit) {
+            count++;
+            return exercise;
+          }
+        });
+
+        response.count = count;
+        response.log = [];
+
+        for (let i = 0; i < count; i++) {
+          response.log.push({'description': log[i].description, 'duration': log[i].duration, 'date': log[i].date.toDateString()});
+        }
+        
+        res.json(response);
       }
+     
+    } else {
+      res.json({'Error': 'Error retrieving user!'});
     }
   });
 });
 
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log('Your app is listening on port ' + listener.address().port)
-})
+});
