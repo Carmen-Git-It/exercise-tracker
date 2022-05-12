@@ -74,6 +74,18 @@ const addExercise = function(id, description, duration, date, done) {
     });
 };
 
+const getUserById = function(id, done) {
+    Users.findById(id, (err, user) => {
+        if (err) {
+            return done(err, null);
+        } 
+        else {
+            return done(null, user);
+        }
+    });
+}
+
 exports.usersModel = Users;
 exports.createUser = createUser;
 exports.addExercise = addExercise;
+exports.getUserById = getUserById;

@@ -13,6 +13,7 @@ app.get('/', (req, res) => {
 
 const createUser = require('./users.js').createUser;
 const addExercise = require('./users.js').addExercise;
+const getUserById = require('./users.js').getUserById;
 
 app.post('/api/users', (req, res, next) => {
   if(req.body.username === '') {
@@ -40,6 +41,18 @@ app.post('/api/users/:_id/exercises', (req, res, next) => {
   } else {
     res.json({'Error': 'Cannot process request with missing data.'});
   }
+});
+
+app.get('/api/users/:_id/logs', (req, res) => {
+  getUserById(id, (err, user) => {
+    if (err) {
+      res.json({'Error': 'Error retrieving user!'});
+    } else {
+      if (req.params.from && req.params.to && req.params.limit) {
+        
+      }
+    }
+  });
 });
 
 const listener = app.listen(process.env.PORT || 3000, () => {
